@@ -1,11 +1,16 @@
-# Mobile benchmark contract
+# PAM Native Benchmarks
+
+Public, reproducible same-device evidence for PAM Native, React Native,
+Flutter, and platform-native applications. This repository publishes the
+comparison contract and verifier—not a predeclared winner. Results are emitted
+only for measurements shared by every submitted framework report.
 
 The comparison harness accepts React Native as the required public baseline and
 optional Flutter and platform-native reports. A matrix is emitted only for
 measurements present in every report, preventing selective claims:
 
 ```bash
-python3 benchmarks/mobile/compare.py \
+python3 compare.py \
   --pam evidence/pam --react-native evidence/react-native \
   --flutter evidence/flutter --native evidence/platform-native \
   --output evidence/framework-matrix.md
@@ -65,10 +70,15 @@ The checked-in `budgets.json` is intentionally stricter than a generic
 "benchmark completed" check: absent metrics fail, and list P95/P99 are gated
 independently so a good median cannot hide visible jank.
 
-Use a physical device, release-like non-debuggable targets, a stable thermal
+Use the same physical device, release-like non-debuggable targets, a stable thermal
 state and the same compilation mode. Keep raw JSON and Perfetto traces as CI
 artifacts. Record APK/AAB size separately because it is a build artifact rather
 than a runtime metric; the CI release gate reports it alongside these results.
+
+The harness originated in
+[`push-in/pam-native`](https://github.com/push-in/pam-native/tree/v0.7.0/benchmarks/mobile)
+and is published independently so competitors can inspect, fork, reproduce,
+and challenge every comparison.
 
 `REFERENCE.md` records the latest physical-device Pam Native baseline and its
 remaining tail-latency caveat.
@@ -79,8 +89,8 @@ Create and immediately verify an integrity manifest before publishing or
 uploading a result directory:
 
 ```bash
-python3 benchmarks/mobile/evidence.py results/pam 1
-python3 benchmarks/mobile/evidence.py results/pam 1 --verify
+python3 evidence.py results/pam 1
+python3 evidence.py results/pam 1 --verify
 ```
 
 The manifest hashes every AndroidX report, Perfetto trace, log, and other result
