@@ -1,0 +1,26 @@
+name: Benchmark contract
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.14'
+      - name: Verify comparison and evidence contracts
+        run: |
+          python3 -m unittest test_compare.py
+          python3 -m py_compile compare.py evidence.py gate.py
+          python3 -m json.tool budgets.json >/dev/null
+          python3 -m json.tool contract.json >/dev/null
