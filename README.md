@@ -1,4 +1,50 @@
+<!-- pam:product-page:start -->
+<div align="center">
+
 # PAM Native Benchmarks
+
+**Comparable mobile performance claims, measured on the same device.**
+
+Versioned workloads and evidence contracts for comparing PAM Native, React Native, Flutter, and platform-native implementations.
+
+[![Release](https://img.shields.io/github/v/release/push-in/pam-native-benchmarks?style=flat-square&label=stable)](https://github.com/push-in/pam-native-benchmarks/releases)
+[![CI](https://img.shields.io/github/actions/workflow/status/push-in/pam-native-benchmarks/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/push-in/pam-native-benchmarks/actions)
+![PHP](https://img.shields.io/badge/PHP-8.5-777BB4?style=flat-square&logo=php&logoColor=white)
+![License](https://img.shields.io/github/license/push-in/pam-native-benchmarks?style=flat-square)
+
+**[Documentation](https://github.com/push-in/pam-native-benchmarks/tree/main/docs) · [Why this exists](#why-this-exists) · [What you can build](#what-you-can-build) · [Quick start](#quick-start) · [Issues](https://github.com/push-in/pam-native-benchmarks/issues)**
+
+</div>
+
+---
+
+## Why this exists
+
+Versioned workloads and evidence contracts for comparing PAM Native, React Native, Flutter, and platform-native implementations.
+
+| | |
+| --- | --- |
+| **Role** | Benchmark laboratory |
+| **Execution path** | Android Macrobenchmark · iOS XCTest metrics |
+| **This repository owns** | Workload definitions, measurement protocol, budgets, and evidence format |
+| **Boundary** | Results are device/build specific; this repository does not publish universal marketing numbers |
+
+## What you can build
+
+- Same-device startup and frame-time comparisons
+- Detecting performance regressions before releases
+- Publishing reproducible benchmark evidence instead of anecdotes
+
+## Quick start
+
+```bash
+git clone https://github.com/push-in/pam-native-benchmarks.git
+cd pam-native-benchmarks
+./scripts/verify.sh
+```
+
+The **[PAM documentation](https://github.com/push-in/pam-native-benchmarks/tree/main/docs)** covers prerequisites, production setup, and the complete workflow. PAM projects keep normal manifests and lockfiles; product features stay in the package that owns them.
+<!-- pam:product-page:end -->
 
 Public, reproducible same-device evidence for PAM Native, React Native,
 Flutter, and platform-native applications. This repository publishes the
