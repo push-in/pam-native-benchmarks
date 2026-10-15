@@ -1,0 +1,15 @@
+{
+  "$schema": "https://push-in.github.io/pam-docs/schemas/pam.schema.json",
+  "name": "bench",
+  "native": {
+    "applicationId": "dev.bench.pam",
+    "platforms": [
+      1,
+      2
+    ],
+    "starter": 1
+  },
+  "schema": 1,
+  "type": 2,
+  "version": "0.1.0"
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "vendor/pushinbr/pam-native/resources/pam-native.schema.json",
+  "android": {
+    "deepLinks": [
+      {
+        "scheme": "bench"
+      }
+    ],
+    "minSdk": 26,
+    "permissions": [],
+    "targetSdk": 36
+  },
+  "applicationId": "dev.bench.pam",
+  "entry": "index.php",
+  "ios": {
+    "minimumVersion": "15.0"
+  },
+  "modules": [],
+  "name": "bench",
+  "runtime": {
+    "channel": "stable",
+    "php": "8.5"
+  },
+  "version": 1,
+  "versionCode": 1,
+  "versionName": "0.1.0",
+  "views": []
+}

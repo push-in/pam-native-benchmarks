@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "Bench RN",
+    "slug": "bench-rn",
+    "version": "1.0.0",
+    "scheme": "bench",
+    "orientation": "portrait",
+    "backgroundColor": "#FFFFFF",
+    "newArchEnabled": true,
+    "android": {
+      "package": "dev.bench.rn"
+    },
+    "plugins": ["./plugins/withBenchRelease"]
+  }
+}

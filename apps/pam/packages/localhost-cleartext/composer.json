@@ -1,0 +1,15 @@
+{
+    "name": "bench/localhost-cleartext",
+    "description": "Benchmark only: trusts the loopback asset server test CA (suite/tls/bench-ca.pem).",
+    "type": "pam-native-plugin",
+    "license": "proprietary",
+    "require": {
+        "pushinbr/pam-native": "^1.41"
+    },
+    "extra": {
+        "pam-native": {
+            "plugin": "pam-native.plugin.json"
+        }
+    },
+    "version": "1.0.0"
+}

@@ -1,0 +1,17 @@
+{
+    "$schema": "../../vendor/pushinbr/pam-native/packages/native/resources/pam-native.plugin.schema.json",
+    "version": 1,
+    "protocol": 1,
+    "pamNative": {
+        "minimum": "1.41.0",
+        "maximumExclusive": "2.0.0"
+    },
+    "android": {
+        "namespace": "dev.bench.cleartext",
+        "minSdk": 26,
+        "resourceDirs": [
+            "android/src/main/res"
+        ],
+        "manifest": "android/src/main/AndroidManifest.xml"
+    }
+}

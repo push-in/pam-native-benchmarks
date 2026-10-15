@@ -2,3 +2,7 @@ __pycache__/
 *.py[cod]
 evidence/
 results/
+.assets/
+results/
+.build.lock
+apps/.pam-exp/
