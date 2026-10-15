@@ -691,6 +691,14 @@ def main() -> None:
         dev.sh(f"cmd package compile -m speed -f {PKGS[name]}", timeout=600)
         entry["art_compiler_filter"] = "speed"
         app = App(dev, name)
+        # One unmeasured launch of each screen first, for every app: what a
+        # fresh install fills once (PAM's compiled-template and opcode
+        # caches, RN's bundle cache, Coil/expo-image disk caches are reset by
+        # the scenarios that measure them) is not counted as a cold start.
+        for warm in ("home", "list", "grid", "like", "filter"):
+            app.launch(f"bench://{warm}", ready=warm, timeout=20)
+        dev.sh(f"am force-stop {PKGS[name]}")
+        entry["warmed"] = True
         for sc in only:
             print(f"[{name}] {sc} ...", flush=True)
             t = time.time()
