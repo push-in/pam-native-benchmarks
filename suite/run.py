@@ -445,7 +445,9 @@ def sc_like(app: App, quick: bool) -> dict:
     lat, cpu, rer = [], [], []
     seq = list(targets.items()) * 2
     for n, (i, (x, y)) in enumerate(seq):
-        app.gfx_reset()
+        # No gfxinfo reset per tap: frames are selected by the tap's
+        # monotonic marker, and a reset while a frame is in flight drops the
+        # following frames' stats on some apps (PAM lost every tap but the first).
         app.dev.sh("logcat -c")
         c0 = app.proc_cpu()
         t0 = app.dev.tap(x, y, f"like{n}")
@@ -480,7 +482,6 @@ def sc_filter(app: App, quick: bool) -> dict:
     lat, cpu = [], []
     app.gfx_reset()
     for n, ch in enumerate("limaz"):
-        app.gfx_reset()
         c0 = app.proc_cpu()
         t0 = app.dev.key(ch, f"key{n}")
         time.sleep(1.5)
