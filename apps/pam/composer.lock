@@ -34,16 +34,16 @@
         },
         {
             "name": "pushinbr/pam-native",
-            "version": "v1.41.0",
+            "version": "v1.43.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/push-in/pam-native.git",
-                "reference": "8de779d2cd3cc2fad780b55e45c2b300dd1fd20c"
+                "reference": "47908141d1e42c466b59c120f6a494c998048a36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/push-in/pam-native/zipball/8de779d2cd3cc2fad780b55e45c2b300dd1fd20c",
-                "reference": "8de779d2cd3cc2fad780b55e45c2b300dd1fd20c",
+                "url": "https://api.github.com/repos/push-in/pam-native/zipball/47908141d1e42c466b59c120f6a494c998048a36",
+                "reference": "47908141d1e42c466b59c120f6a494c998048a36",
                 "shasum": ""
             },
             "require": {
@@ -426,7 +426,7 @@
                 "issues": "https://github.com/push-in/pam-native/issues",
                 "source": "https://github.com/push-in/pam-native"
             },
-            "time": "2026-10-14T23:50:59+00:00"
+            "time": "2026-10-15T01:20:57+00:00"
         }
     ],
     "packages-dev": [

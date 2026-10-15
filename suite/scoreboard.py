@@ -15,11 +15,13 @@ from pathlib import Path
 METRICS = [
     ("cold_start", "ttid_ms_median", "Cold start TTID (mediana)", "ms", "native", 1),
     ("cold_start", "ttfd_ms_median", "Cold start até conteúdo (mediana)", "ms", "native", 1),
+    ("list", "ready_ms", "Lista 10k: tempo até conteúdo", "ms", "native", 1),
     ("list", "p90_ms", "Lista 10k: frame p90", "ms", "native", 1),
     ("list", "p99_ms", "Lista 10k: frame p99", "ms", "native", 1),
     ("list", "janky_pct", "Lista 10k: jank", "%", "native", 0.1),
     ("list", "cpu_ms", "Lista 10k: CPU no scroll", "ms", "native", 10),
     ("list", "pss_kb", "Lista 10k: PSS", "KB", "native", 1),
+    ("grid", "ready_ms", "Grade 500 imgs: primeira imagem", "ms", "native", 1),
     ("grid", "p99_ms", "Grade 500 imgs: frame p99", "ms", "native", 1),
     ("grid", "janky_pct", "Grade 500 imgs: jank", "%", "native", 0.1),
     ("grid", "cpu_ms", "Grade 500 imgs: CPU", "ms", "native", 10),
@@ -37,10 +39,10 @@ METRICS = [
     ("idle60", "threads", "Ocioso: threads", "", "native", 1),
     ("idle600", "cpu_ms", "Ocioso 10 min: CPU", "ms", "zero", 10),
     ("idle600", "wakeups_per_min", "Ocioso 10 min: wakeups/min", "/min", "zero", 1),
-    ("idle600", "mah", "Ocioso 10 min: mAh (batterystats)", "mAh", "zero", 0.001),
+    ("idle600", "mah", "Ocioso 10 min: mAh (batterystats)", "mAh", "zero", 0.00001),
     ("bg600", "cpu_ms", "Background 10 min: CPU", "ms", "zero", 10),
     ("bg600", "wakeups_per_min", "Background 10 min: wakeups/min", "/min", "zero", 1),
-    ("bg600", "mah", "Background 10 min: mAh", "mAh", "zero", 0.001),
+    ("bg600", "mah", "Background 10 min: mAh", "mAh", "zero", 0.00001),
     ("nav", "pss_growth_kb_cycle1_to_last", "Nav 20 telas: crescimento PSS (ciclo 1→3)", "KB", "zero", 256),
     ("nav", "pss_kb_peak_last", "Nav 20 telas: PSS no pico", "KB", "native", 1),
     ("nav", "push_to_ready_ms_median", "Nav: toque→tela (mediana)", "ms", "native", 1),
@@ -73,6 +75,8 @@ def value(app: dict, scenario: str, key: str):
 def fmt(v, unit=""):
     if v is None:
         return "—"
+    if isinstance(v, float) and 0 < abs(v) < 0.1:
+        return f"{v:.2g}"
     if isinstance(v, float) and not v.is_integer():
         return f"{v:,.2f}".replace(",", " ")
     return f"{int(v):,}".replace(",", " ")
