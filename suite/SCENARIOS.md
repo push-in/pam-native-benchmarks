@@ -9,6 +9,10 @@ ratios `PAM/Native` (overhead, target <= 1.1x) and `RN/PAM` (advantage).
 | --- | --- | --- | --- |
 | Native | `apps/native` | `dev.bench.native` | Kotlin, Views + RecyclerView, Coil 3, Media3, OkHttp |
 | PAM | `apps/pam` | `dev.bench.pam` | PAM Native (latest published), PHP components |
+
+The PAM list scenarios (`list`, `grid`, `like`, `filter`) are written the common way, as
+templates with `p-for` (`apps/pam/src/Templates`). `run.py --pam-api builder` opens the same
+scenarios through the PHP builder API (`?api=builder`, `apps/pam/src/Screens`) to measure both paths.
 | RN | `apps/react-native` | `dev.bench.rn` | RN 0.85 New Arch + Hermes, Expo 56 modules, FlashList v2, Reanimated 4, expo-image, Gesture Handler, react-navigation native-stack, expo-video |
 
 ## Run
