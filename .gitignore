@@ -6,3 +6,5 @@ results/
 results/
 .build.lock
 apps/.pam-exp/
+apps/.pam-a/
+apps/.pam-enc/
