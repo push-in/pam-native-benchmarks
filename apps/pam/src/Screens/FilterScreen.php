@@ -9,6 +9,7 @@ use App\Support\Lcg;
 use App\Support\Page;
 use Pam\Native\Component;
 use Pam\Native\Element;
+use Pam\Native\InputAutoCapitalize;
 use Pam\Native\InputSyncMode;
 use Pam\Native\Justify;
 use Pam\Native\Style;
@@ -62,6 +63,10 @@ final class FilterScreen extends Component
             TextInput::make($this->query)
                 ->placeholder('Filter')
                 ->caretHidden()
+                // Same field as the RN (autoCorrect={false} autoCapitalize="none")
+                // and native (textNoSuggestions) apps: no IME composing delay.
+                ->autoCorrect(false)
+                ->autoCapitalize(InputAutoCapitalize::None)
                 ->nativeState(InputSyncMode::Immediate)
                 ->onChange($this->search(...))
                 ->accessibilityLabel('filter-input')
