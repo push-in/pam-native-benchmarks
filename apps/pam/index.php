@@ -13,7 +13,12 @@ use App\Screens\ListScreen;
 use App\Screens\NavScreen;
 use App\Screens\StateScreen;
 use App\Screens\VideoScreen;
+use App\Templates\FilterPage;
+use App\Templates\GridPage;
+use App\Templates\LikePage;
+use App\Templates\ListPage;
 use Pam\Native\App;
+use Pam\Native\Renderable;
 use Pam\Native\Navigation\NavigationContainer;
 use Pam\Native\Navigation\NavigationTransition;
 use Pam\Native\Navigation\Navigator;
@@ -38,10 +43,15 @@ $navigator = Route::stack(
     initial: 'home',
     routes: static function () use (&$navigator): void {
         Route::screen('home', static fn (): HomeScreen => new HomeScreen($navigator));
-        Route::screen('list', ListScreen::class)->deepLink('/list');
-        Route::screen('grid', GridScreen::class)->deepLink('/grid');
-        Route::screen('like', LikeScreen::class)->deepLink('/like');
-        Route::screen('filter', FilterScreen::class)->deepLink('/filter');
+        // The list scenarios use templates with p-for (the common way to
+        // write PAM screens); `?api=builder` opens the PHP builder version
+        // (VirtualizedList::of on 1.45+) for the same scenario.
+        $variant = static fn (string $template, string $builder): Closure => static fn (RouteContext $route): Renderable
+            => $route->string('api', 'template') === 'builder' ? new $builder() : App::make($template);
+        Route::screen('list', $variant(ListPage::class, ListScreen::class))->deepLink('/list');
+        Route::screen('grid', $variant(GridPage::class, GridScreen::class))->deepLink('/grid');
+        Route::screen('like', $variant(LikePage::class, LikeScreen::class))->deepLink('/like');
+        Route::screen('filter', $variant(FilterPage::class, FilterScreen::class))->deepLink('/filter');
         Route::screen('anim', AnimScreen::class)->deepLink('/anim');
         Route::screen('nav', static fn (RouteContext $route): NavScreen => new NavScreen($route->integer('k', 0) ?? 0))
             ->deepLink('/nav');

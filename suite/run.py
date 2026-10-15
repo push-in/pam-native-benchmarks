@@ -203,6 +203,12 @@ def wait_log(dev: Device, pred, timeout: float = 30) -> tuple[float, str] | None
     return None
 
 
+# PAM screens of the list scenarios: "template" (p-for, the default routes)
+# or "builder" (PHP builder API, `?api=builder`).
+PAM_API = "template"
+LIST_SCENARIOS = ("list", "grid", "like", "filter")
+
+
 class App:
     def __init__(self, dev: Device, name: str):
         self.dev = dev
@@ -215,6 +221,10 @@ class App:
         if cold:
             d.sh(f"am force-stop {self.pkg}")
             time.sleep(0.5)
+        if self.name == "pam" and PAM_API != "template":
+            host = uri.split("://", 1)[-1].split("?", 1)[0]
+            if host in LIST_SCENARIOS:
+                uri += ("&" if "?" in uri else "?") + f"api={PAM_API}"
         d.sh("logcat -c")
         d.sh("log -t BENCHT start")
         t0 = d._marker_ts("start")
@@ -652,7 +662,10 @@ def main() -> None:
     ap.add_argument("--apps", default="native,pam,rn")
     ap.add_argument("--quick", action="store_true")
     ap.add_argument("--no-install", action="store_true")
+    ap.add_argument("--pam-api", choices=["template", "builder"], default="template",
+                    help="PAM list screens: template p-for (default) or the PHP builder API")
     a = ap.parse_args()
+    globals()["PAM_API"] = a.pam_api
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     raw_path = out / "raw.json"
@@ -660,6 +673,7 @@ def main() -> None:
     dev = Device(a.serial)
     raw["device"] = dev.setup()
     raw["quick"] = a.quick
+    raw["pam_api"] = a.pam_api
     apks = dict(x.split("=", 1) for x in a.apk)
     only = [s for s in a.only.split(",") if s] or list(SCENARIOS)
     for name in a.apps.split(","):
