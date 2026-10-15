@@ -30,6 +30,14 @@ final class LikeScreen extends Component
 
     public function render(): Element
     {
+        // Data-driven list (PAM Native 1.45+): a like rebuilds only the shown rows.
+        if (method_exists(VirtualizedList::class, 'of')) {
+            return Page::make(
+                VirtualizedList::of(range(0, self::COUNT - 1), fn (int $i): Element => $this->row($i, isset($this->liked[$i])))
+                    ->estimatedRowHeight(72)
+                    ->style(new Style(flexGrow: 1)),
+            );
+        }
         $rows = [];
         for ($i = 0; $i < self::COUNT; $i++) {
             $rows[] = $this->row($i, isset($this->liked[$i]));

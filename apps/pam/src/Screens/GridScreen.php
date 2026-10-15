@@ -20,6 +20,13 @@ final class GridScreen extends Component
 
     public function render(): Element
     {
+        // Data-driven grid (PAM Native 1.45+).
+        if (method_exists(VirtualGrid::class, 'of')) {
+            return Page::make(
+                VirtualGrid::of(3, range(0, self::COUNT - 1), fn (int $i): Element => $this->cell($i))
+                    ->style(new Style(flexGrow: 1)),
+            );
+        }
         $cells = [];
         for ($i = 0; $i < self::COUNT; $i++) {
             $cells[] = View::make(
@@ -32,6 +39,15 @@ final class GridScreen extends Component
         return Page::make(
             VirtualGrid::make(3, ...$cells)->style(new Style(flexGrow: 1)),
         );
+    }
+
+    private function cell(int $i): Element
+    {
+        return View::make(
+            Image::make(Bench::ASSETS."/img/{$i}.jpg")
+                ->onLoad($this->loaded(...))
+                ->style(new Style(widthPercent: 100, heightPercent: 100)),
+        )->style(new Style(aspectRatio: 1, padding: 1));
     }
 
     /** First image decoded on screen (the closest native signal to "first frame with an image"). */

@@ -30,27 +30,41 @@ final class FilterScreen extends Component
     /** @var list<Element> immutable row elements, built once */
     private array $rows = [];
 
+    /** @var list<string> row labels, by row index */
+    private array $labels = [];
+
     public function boot(): void
     {
         $lcg = new Lcg(42);
+        $eager = !method_exists(VirtualizedList::class, 'of');
         for ($i = 0; $i < self::COUNT; $i++) {
             $label = "Name {$i} ".$lcg->word();
             $this->keys[] = strtolower($label);
-            $this->rows[] = Text::make($label)
-                ->key((string) $i)
-                ->style(new Style(
-                    height: 48,
-                    paddingHorizontal: 16,
-                    justifyContent: Justify::Center,
-                    textColor: Bench::TEXT,
-                    fontSize: 16,
-                ));
+            $this->labels[] = $label;
+            if ($eager) {
+                $this->rows[] = $this->rowAt($i)->key((string) $i);
+            }
         }
+    }
+
+    private function rowAt(int $i): Element
+    {
+        return Text::make($this->labels[$i])
+            ->style(new Style(
+                height: 48,
+                paddingHorizontal: 16,
+                justifyContent: Justify::Center,
+                textColor: Bench::TEXT,
+                fontSize: 16,
+            ));
     }
 
     public function render(): Element
     {
         $needle = strtolower($this->query);
+        if (method_exists(VirtualizedList::class, 'of')) {
+            return $this->page($needle);
+        }
         $visible = $needle === ''
             ? $this->rows
             : array_values(array_filter(
@@ -88,6 +102,44 @@ final class FilterScreen extends Component
                 ->style(new Style(flexGrow: 1)),
         );
     }
+
+    /** Data-driven rows (PAM Native 1.45+): only the shown rows are built. */
+    private function page(string $needle): Element
+    {
+        $matches = $needle === ''
+            ? array_keys($this->keys)
+            : array_keys(array_filter($this->keys, static fn (string $key): bool => str_contains($key, $needle)));
+
+        return Page::make(
+            TextInput::make($this->query)
+                ->placeholder('Filter')
+                ->caretHidden()
+                // Same field as the RN (autoCorrect={false} autoCapitalize="none")
+                // and native (textNoSuggestions) apps: no IME composing delay.
+                ->autoCorrect(false)
+                ->autoCapitalize(InputAutoCapitalize::None)
+                ->nativeState(InputSyncMode::Immediate)
+                ->onChange($this->search(...))
+                ->accessibilityLabel('filter-input')
+                ->style(new Style(
+                    height: 48,
+                    marginHorizontal: 16,
+                    marginTop: 8,
+                    paddingHorizontal: 12,
+                    borderWidth: 1,
+                    borderColor: 0xFFD1D5DB,
+                    borderRadius: 8,
+                    textColor: Bench::TEXT,
+                    fontSize: 16,
+                )),
+            Text::make(count($matches).' results')
+                ->style(new Style(paddingHorizontal: 16, paddingVertical: 8, textColor: Bench::MUTED, fontSize: 14)),
+            VirtualizedList::of($matches, fn (int $i): Element => $this->rowAt($i), static fn (int $i): int => $i)
+                ->estimatedRowHeight(48)
+                ->style(new Style(flexGrow: 1)),
+        );
+    }
+
 
     public function attached(): void
     {

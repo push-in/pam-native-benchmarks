@@ -25,6 +25,21 @@ final class ListScreen extends Component
 
     public function render(): Element
     {
+        // Data-driven list (PAM Native 1.45+), the FlashList renderItem idiom.
+        if (method_exists(VirtualizedList::class, 'of')) {
+            return Page::make(
+                VirtualizedList::of(
+                    range(0, self::COUNT - 1),
+                    static fn (int $i): Element => match ($i % 3) {
+                        0 => self::compact($i),
+                        1 => self::avatar($i),
+                        default => self::card($i),
+                    },
+                )
+                    ->estimatedRowHeight(72)
+                    ->style(new Style(flexGrow: 1)),
+            );
+        }
         $rows = [];
         for ($i = 0; $i < self::COUNT; $i++) {
             $rows[] = (match ($i % 3) {
